@@ -139,6 +139,11 @@ body {
     text-decoration:line-through;
 }
 
+.tag.hide {
+    transform: scale(0);
+    opacity: 0;
+}
+
 #button-div {
     display: flex;
     justify-content: center;

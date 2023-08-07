@@ -138,12 +138,6 @@ function showSuggestions(problems, userInput) {
     searchArea.classList.add("show-suggestions"); 
 }
 
-function createElementByHTML(htmlString) {
-    const ele = document.createElement("div");
-    ele.innerHTML = htmlString;
-    return ele.firstChild;
-}
-
 // 新增 tag
 function addTag(tag) {
     let tags = [...currentTags.querySelectorAll(".tag")].map((elem) => elem.innerHTML); // 現有的 tag
@@ -153,28 +147,16 @@ function addTag(tag) {
     
     let tagHTML = document.createElement("span");
     tagHTML.innerHTML = tag;
-    tagHTML.classList.add("tag");
-    tagHTML.addEventListener("click", (event) => {
-        event.target.animate([
-            { maxWidth: "auto", paddingLeft: "auto", paddingRight: "auto", opacity: 1 },
-            { maxWidth: 0, paddingLeft: 0, paddingRight: 0, opacity: 0 }
-        ], {
-            duration: 100,
-            easing: "ease-in-out",
-            fill: "forwards",
-        }).finished.then(() => {
-            currentTags.removeChild(event.target);
-        });
+    tagHTML.classList.add("tag", "hide");
+    tagHTML.addEventListener("click", () => {
+        tagHTML.classList.add("hide");
+        tagHTML.addEventListener("transitionend", () => {
+            currentTags.removeChild(tagHTML);
+        })
     });
     currentTags.appendChild(tagHTML);
-    tagHTML.animate([
-        { maxWidth: 0, paddingLeft: 0, paddingRight: 0, opacity: 0 },
-        { maxWidth: "auto", paddingLeft: "auto", paddingRight: "auto", opacity: 1 }
-    ], {
-        duration: 100,
-        easing: "ease-in-out",
-        fill: "forwards",
-    });
+    tagHTML.offsetWidth; // 這行讓下一行不會合併進上面的操作
+    tagHTML.classList.remove("hide");
 }
 
 // 如果使用者按下儲存按鈕，就觸發這個函式
